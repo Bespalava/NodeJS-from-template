@@ -1,5 +1,6 @@
 const User = require('../resources/users/user.model');
 const Board = require('../resources/boarsd/board.model');
+const Task = require('../resources/tasks/task.model');
 
 let users = [new User({ id: 'user1' }), new User()];
 
