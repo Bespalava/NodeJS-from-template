@@ -1,7 +1,7 @@
 const User = require('../resources/users/user.model');
 const Board = require('../resources/boarsd/board.model');
 
-let users = [new User({ id: 'user1' }), new User()];
+let users = [new User({ id: 'user1' })];
 
 let boards = [
   new Board({
