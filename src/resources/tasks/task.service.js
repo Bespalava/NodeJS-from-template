@@ -1,4 +1,4 @@
-const tasksRepo = require('./tasks.memory.repository');
+const tasksRepo = require('./task.memory.repository');
 
 const getAll = () => tasksRepo.getAll();
 
