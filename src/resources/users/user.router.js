@@ -1,35 +1,47 @@
 const router = require('express').Router();
+const User = require('./user.model');
 const usersService = require('./user.service');
 
 router.route('/').get(async (req, res) => {
   const users = await usersService.getAll();
-  res.json(users);
-});
-
-router.route('/').post(async (req, res) => {
-  const userData = req.body;
-  const newUser = await usersService.create(userData);
-  res.status(201).json(newUser);
+  res.json(users.map(User.toResponse));
 });
 
 router.route('/:id').get(async (req, res) => {
-  const { id } = req.params;
-  const user = await usersService.get(id);
-  if (user) res.json(user);
-  else res.send(404);
+ try {
+   const user = await usersService.get(req.params.id);
+   res.json(User.toResponse(user));
+ } catch (e) {
+  res.status(404).send(`User not found`);
+ }  
 });
 
-router.route('/:userId').put(async (req, res) => {
-  const { userId } = req.params;
-  const userData = { ...req.body, id: userId };
-  const updatedUser = await usersService.update(userData);
-  res.json(updatedUser);
+router.route('/').post(async (req, res) => {
+ const user =  await usersService.create(new User({ login: req.body.login, name: req.body.name, password: req.body.password }))
+ res.status(201);
+ res.json(User.toResponse(user));
 });
 
-router.route('/:userId').delete(async (req, res) => {
-  const { userId } = req.params;
-  await usersService.remove(userId);
-  res.sendStatus(204);
+router.route('/:id').delete(async (req, res) => {
+ await usersService.remove(req.params.id);
+  res.status(204).json(null);
+});
+
+router.route('/:id').put(async (req, res) => {
+  try {
+    const idUser = req.params.id;
+    const newUser = {
+      id: idUser,
+      login: req.body.login,
+      name: req.body.name,
+      password: req.body.password,
+    };
+    await usersService.update(idUser, newUser);
+    return res.status(200).send(User.toResponse(newUser));
+  } catch (err) {  
+    return res.status(404).end('User not found');
+  }
+
 });
 
 module.exports = router;
