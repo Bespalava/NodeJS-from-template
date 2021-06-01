@@ -1,6 +1,6 @@
 const router = require('express').Router();
-const User = require('./user.model');
 const usersService = require('./user.service');
+const User = require('./user.model');
 
 router.route('/').get(async (req, res) => {
   const users = await usersService.getAll();
@@ -43,5 +43,4 @@ router.route('/:id').put(async (req, res) => {
   }
 
 });
-
 module.exports = router;
