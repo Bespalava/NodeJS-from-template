@@ -1,20 +1,17 @@
 const User = require('../resources/users/user.model');
 const Board = require('../resources/boarsd/board.model');
+const uuid = require('uuid').v4;
 
-let users = [new User({ id: 'user1' }), new User()];
+let users = [new User({ id: uuid(), name: 'user1', login: 'user1', password: 'user1' })];
 
-let boards = [
-  new Board({
-    id: 'board1',
-    columns: [{ id: 'column1', title: 'column', order: 1 }],
-  })
-];
+let boards = [new Board({id: uuid(), title: 'board1', columns: ['task1', 'task2']})];
 
 const getAllUsers = async () => users;
 const getUser = async (id) => users.find((user) => user.id === id);
+
 const createUser = async (user) => {
   users.push(user);
-  return getUser(user.id);
+  return user;
 };
 
 const removeUser = async (id) => {
